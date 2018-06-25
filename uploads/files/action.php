@@ -64,12 +64,15 @@ if(isset($_POST["action"]))
     <th>Löschen</th>
     <th>Datei hochladen</th>
     <th>Teilen</th>
+    <th>Runterladen</th>
+    <th>Download</th>
    </tr>
    ';
         if(count($folder) > 0 && count($uploadfile) > 0)
         {
             foreach($folder as $name)
             {
+                $dateityp = mime_content_type($name);
                 $output .= '
      <tr>
       <td>'.$name.'</td>
@@ -77,10 +80,14 @@ if(isset($_POST["action"]))
       <td><button type="button" name="delete" data-name="'.$name.'" class="delete btn btn-default btn-xs">Delete</button></td>
       <td><button type="button" name="upload" data-name="'.$name.'" class="upload btn btn-default btn-xs">Upload File</button></td>
       <td><button type="button" name="view_files" data-name="'.$name.'" class="view_files btn btn-default btn-xs">Teilen</button></td>
+      <td><button type="button" name="download" data-name="'.$name.'" class="download btn btn-default btn-xs">Download</button></td>
      </tr>';
+
+
             }
             foreach($uploadfile as $name)
             {
+                $dateityp = mime_content_type($name);
                 $output .='
      <tr>
       <td>'.$name.'</td>
@@ -88,7 +95,13 @@ if(isset($_POST["action"]))
       <td><button type="button" name="remove_file" class="remove_file btn btn-default btn-xs" id="'.$path.'">Delete</button></td>
       <td> </td>
       <td><button type="button" name="view_files" data-name="'.$name.'" class="view_files btn btn-default btn-xs">Teilen</button></td>
+      <td><button type="button" name="download" data-name="'.$name.'" class="download btn btn-default btn-xs">Download</button></td>
+   <td><a download="'.$name.'" href="'.$name.'"> Download</a></td>
+      
+      
+    
      </tr>';
+
             }
         }
         else
@@ -102,6 +115,8 @@ if(isset($_POST["action"]))
         $output .= '</table>';
         echo $output;
     }
+
+
 
     if($_POST["action"] == "create")
     {
@@ -147,6 +162,49 @@ if(isset($_POST["action"]))
             echo 'Folder Deleted';
         }
     }
+
+    if($_POST["action"] == "remove_file")
+    {
+        if(file_exists($_POST["path"]))
+        {
+            unlink($_POST["path"]);
+            echo 'File Deleted';
+        }
+    }
+
+    /*if($_POST["action"] == "download"){
+        $downloadfile = scandir($_POST["folder_name"]);
+        $filesize = filesize($downloadfile);
+
+        header("Content-Type: image/jpeg");
+        header("Content-Disposition: attachment; filename='$downloadfile'");
+        header("Content-Length: $filesize");
+
+        readfile($downloadfile);
+        exit;
+
+        $downloadfile = basename('$name');
+        $filepath = "../files/".$downloadfile;
+        if(!empty($downloadfile) && file_exists($filepath)){
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header("Content-Type: '$dateityp'");
+            header("Content-Disposition: attachment; filename='$name'");
+            header("Content-Transfer-Encoding: binary");
+            header("Content-Length: " . filesize($name));
+            readfile($name);
+            exit;
+        }else{
+            echo "The file does not exist";
+        }
+        //if(isset($_POST['downloadfile'])) {
+        if(file_exists("downloadfile")){
+            header("Content-Type: '$dateityp'");
+            header("Content-Disposition: attachment; filename='$name'");
+            header("Content-Length: " . filesize($name));
+            readfile($name);
+        }
+    }*/
 
     if($_POST["action"] == "fetch_files")
     {

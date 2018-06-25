@@ -164,6 +164,21 @@
             }
         });
 
+        /*$(document).on("click", ".download", function () {
+            var downloadfile = $(this).data("name");
+            var action = "download";
+            $.ajax({
+                url:"action.php",
+                method:"POST",
+                data:{downloadfile:downloadfile, action:action},
+                success:function(data)
+                {
+                    load_folder_list();
+                }
+            });
+
+        });*/
+
         $(document).on('click', '.upload', function(){
             var folder_name = $(this).data("name");
             $('#hidden_folder_name').val(folder_name);
@@ -213,7 +228,7 @@
                     success:function(data)
                     {
                         alert(data);
-                        $('#filelistModal').modal('hide');
+                        $('#folder_table').modal('hide');
                         load_folder_list();
                     }
                 });
