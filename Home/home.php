@@ -9,8 +9,6 @@
 </head>
 <body>
 
-
-
 <div id="header">
 
     <div class="search-container">
@@ -30,7 +28,7 @@
 
 <div id="content">
 
-     <iframe id="tabelle"><?php  include '../uploads/files/index.php';?> </iframe>
+     <iframe id="tabelle" src="../uploads/files/table.php"></iframe>
 
 </div>
 
