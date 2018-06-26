@@ -1,16 +1,18 @@
 <?php
 session_start();
-$pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai');
+$pdo = new PDO('mysql:host=localhost;dbname=u-ns106', 'ns106', 'se4aeda8Ai');
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Registrierung</title>
+    <link rel="stylesheet" href="registration.css"/>
 </head>
 <body>
 
 <?php
-$showFormular = true;
+$showFormular = true; //Variable ob das Registrierungsformular anezeigt werden soll
+
 if(isset($_GET['register'])) {
     $error = false;
     $email = $_POST['email'];
@@ -30,8 +32,9 @@ if(isset($_GET['register'])) {
         $error = true;
     }
 
+    //Überprüfe, dass die E-Mail-Adresse noch nicht registriert wurde
     if(!$error) {
-        $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $statement = $pdo->prepare("SELECT * FROM users2 WHERE email = :email");
         $result = $statement->execute(array('email' => $email));
         $user = $statement->fetch();
 
@@ -41,10 +44,11 @@ if(isset($_GET['register'])) {
         }
     }
 
+    //Keine Fehler, wir können den Nutzer registrieren
     if(!$error) {
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
 
-        $statement = $pdo->prepare("INSERT INTO users (email, passwort) VALUES (:email, :passwort)");
+        $statement = $pdo->prepare("INSERT INTO users2 (email, passwort) VALUES (:email, :passwort)");
         $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash));
 
         if($result) {
@@ -73,7 +77,7 @@ if($showFormular) {
     </form>
 
     <?php
-}
+} //Ende von if($showFormular)
 ?>
 
 </body>

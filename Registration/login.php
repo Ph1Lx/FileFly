@@ -1,13 +1,12 @@
-
 <?php
 session_start();
-$pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai');
+$pdo = new PDO('mysql:host=localhost;dbname=u-ns106', 'ns106', 'se4aeda8Ai');
 
 if(isset($_GET['login'])) {
     $email = $_POST['email'];
     $passwort = $_POST['passwort'];
 
-    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+    $statement = $pdo->prepare("SELECT * FROM users2 WHERE email = :email");
     $result = $statement->execute(array('email' => $email));
     $user = $statement->fetch();
 
@@ -25,6 +24,7 @@ if(isset($_GET['login'])) {
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="registration.css"/>
 </head>
 <body>
 
