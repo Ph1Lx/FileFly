@@ -12,13 +12,17 @@ $pdo = new PDO('mysql:host=localhost;dbname=u-ns106', 'ns106', 'se4aeda8Ai');
 
 <?php
 $showFormular = true; //Variable ob das Registrierungsformular anezeigt werden soll
-
 if(isset($_GET['register'])) {
     $error = false;
     $email = $_POST['email'];
     $passwort = $_POST['passwort'];
     $passwort2 = $_POST['passwort2'];
-
+    $vorname = $_POST['vorname'];
+    $nachname = $_POST['nachname'];
+    $benutzername = $_POST['benutzername'];
+    $geburtsdatum = $_POST['geburtsdatum'];
+    $geschlecht = $_POST['geschlecht'];
+    $telefonnummer = $_POST['telefonnummer'];
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo 'Bitte eine gültige E-Mail-Adresse eingeben<br>';
         $error = true;
@@ -32,14 +36,29 @@ if(isset($_GET['register'])) {
         $error = true;
     }
 
+    if(strlen($benutzername) ==0) {
+        echo 'Bitte einnen Benutzernamen eingeben<br>';
+        $error = true;
+    }
+
     //Überprüfe, dass die E-Mail-Adresse noch nicht registriert wurde
     if(!$error) {
         $statement = $pdo->prepare("SELECT * FROM users2 WHERE email = :email");
         $result = $statement->execute(array('email' => $email));
         $user = $statement->fetch();
-
         if($user !== false) {
             echo 'Diese E-Mail-Adresse ist bereits vergeben<br>';
+            $error = true;
+        }
+    }
+
+    //Überprüfe, ob der Benutzname noch nicht vergeben ist
+    if(!$error) {
+        $statement = $pdo->prepare("SELECT * FROM users2 WHERE benutzername = :benutzername");
+        $result = $statement->execute(array('benutzername' => $benutzername));
+        $user = $statement->fetch();
+        if($user !== false) {
+            echo 'Dieser Benutzername existiert bereits<br>';
             $error = true;
         }
     }
@@ -47,10 +66,8 @@ if(isset($_GET['register'])) {
     //Keine Fehler, wir können den Nutzer registrieren
     if(!$error) {
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
-
-        $statement = $pdo->prepare("INSERT INTO users2 (email, passwort) VALUES (:email, :passwort)");
-        $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash));
-
+        $statement = $pdo->prepare("INSERT INTO users2 (email, passwort, vorname, nachname, benutzername, geburtsdatum, geschlecht, telefonnummer) VALUES (:email, :passwort, :vorname, :nachname, :benutzername, :geburtsdatum, :geschlecht, :telefonnummer)");
+        $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash, 'vorname' => $vorname, 'nachname' => $nachname, 'benutzername' => $benutzername, 'geburtsdatum' => $geburtsdatum, 'geschlecht' => $geschlecht, 'telefonnummer' => $telefonnummer));
         if($result) {
             echo 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
             $showFormular = false;
@@ -59,11 +76,29 @@ if(isset($_GET['register'])) {
         }
     }
 }
-
 if($showFormular) {
     ?>
 
     <form action="?register=1" method="post">
+
+        Vorname:<br>
+        <input type="vorname" size="40" maxlength="250" name="vorname"><br><br>
+
+        Nachname:<br>
+        <input type="nachname" size="40" maxlength="250" name="nachname"><br><br>
+
+        Benutzername:<br>
+        <input type="benutzername" size="40" maxlength="250" name="benutzername"><br><br>
+
+        Geburtsdatum:<br>
+        <input type="geburtsdatum" size="40" maxlength="250" name="geburtsdatum"><br><br>
+
+        Geschlecht:<br>
+        <input type="geschlecht" size="40" maxlength="250" name="geschlecht"><br><br>
+
+        Telefonnummer:<br>
+        <input type="telefonnummer" size="40" maxlength="250" name="telefonnummer"><br><br>
+
         E-Mail:<br>
         <input type="email" size="40" maxlength="250" name="email"><br><br>
 
