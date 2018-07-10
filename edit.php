@@ -1,3 +1,9 @@
+<?php
+session_start();
+$pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
+
+?>
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -6,11 +12,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
 </head>
-
 <body>
-
-<?php include ("profilseite.php");>
-
 
 <div class="container">
     <h1>Profil Seite bearbeiten</h1>
@@ -106,7 +108,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>
                     <div class="col-md-8">
-                        <A href="profilseite.php" >Änderungen speichern </A>
+                        <input type="submit" value="Änderung speichern">
                         <span></span>
                         <A href="profilseite.html" >Cancel </A>
                     </div>
