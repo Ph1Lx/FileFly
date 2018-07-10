@@ -54,8 +54,48 @@ if(isset($_GET['register'])) {
         if($result) {
             echo 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
             $showFormular = false;
+
+            $last_id = $pdo->lastInsertId();
+
+            //neuen Ordner für jeden neu registrierten Nutzer erstellen
+
+            mkdir("../uploads/$last_id", 0777);
+            chmod("../uploads/$last_id", 0777);
+
+
+
+            /*$file = "../uploads/files/action.php";
+            $newfile = "../uploads/$last_id/action.php";
+
+            if(file_exists($file)){
+                if(copy($file, $newfile)){
+                    echo "File copied successfully";
+                }else {
+                    echo "ERROR: File could not be copied.";
+                }
+            }else{
+                echo "ERROR: File does not exist.";
+            }
+
+            $file2 = "../uploads/files/table.php";
+            $newfile2 = "../uploads/$last_id/table.php";
+
+            if(file_exists($file2)){
+                if(copy($file2, $newfile2)){
+                    echo "File copied successfully";
+                }else {
+                    echo "ERROR: File could not be copied.";
+                }
+            }else{
+                echo "ERROR: File does not exist.";
+            }*/
+
+
+
+
+
         } else {
-            echo 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
+            echo 'Es ist leider ein Fehler aufgetreten<br>';
         }
     }
 }
