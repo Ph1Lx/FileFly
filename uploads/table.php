@@ -1,5 +1,9 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Tabelle</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -35,54 +39,75 @@
                 <br />
                 <input type="hidden" name="action" id="action" />
                 <input type="hidden" name="old_name" id="old_name" />
-                <input type="button" name="folder_button" id="folder_button" class="btn btn-info" value="Create" />
+                <input type="button" name="folder_button" id="folder_button" class="btn btn-default" value="Create" />
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
             </div>
         </div>
     </div>
 </div>
-<div id="uploadModal" class="modal fade" role="dialog">
+
+<div id="moveModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Upload File</h4>
+                <h4 class="modal-title"><span id="select_folder">Wähle den Zielordner</span></h4>
             </div>
             <div class="modal-body">
-                <form method="post" id="upload_form" enctype='multipart/form-data'>
-                    <p>Select Image
-                        <input type="file" name="upload_file" /></p>
-                    <br />
-                    <input type="hidden" name="hidden_folder_name" id="hidden_folder_name" />
-                    <input type="submit" name="upload_button" class="btn btn-info" value="Upload" />
-                </form>
+                <div id="select_form">
+
+                    <select name="folder">
+                        <option value="" selected="selected">Wähle einen Ordner</option>
+
+                        <form name="select_folder" id="moveFile" method="post" action="move_file.php">
+
+                            <?php
+                            $directory = $_SESSION['userid'].'/';
+                            $dirs = glob($directory.'*', GLOB_ONLYDIR);
+                            foreach($dirs as $val){
+                                echo '<option value="'.basename($val).'">'.basename($val)."</option>\n";
+                            }
+                            ?>
+                    </select>
+                    <input type="submit" name="verschieben_button" id="verschieben_button" value="Verschieben" class="btn btn-default"/>
+                    </form>
+
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="filelistModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">File List</h4>
-            </div>
-            <div class="modal-body" id="file_list">
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<?php
+
+if(isset($_POST['verschieben_button']))
+{
+    $fileName = $_SESSION['filename'];
+
+    $selectedFolder = $_POST['folder'];
+
+    $currentFilePath = $fileName;
+
+    $newFilePath = $selectedFolder.'/'.$fileName;
+
+    rename($currentFilePath, $newFilePath);
+
+    if($fileMoved){
+        echo "<script type='text/javascript'>alert('Deine Datei wurde erfolgreich verschoben!')</script>";
+    } else {
+        echo "<script type='text/javascript'>alert('Beim Verschieben deiner Datei lief etwas schief. Bitte versuche es nochmal!')</script>";
+    }
+
+}
+
+?>
 
 <script>
     $(document).ready(function(){
@@ -142,14 +167,24 @@
             $('#folder_name').val(folder_name);
             $('#action').val("change");
             $('#folderModal').modal("show");
-            $('#folder_button').val('Update');
-            $('#change_title').text("Change Folder Name");
+            $('#folder_button').val('übernehmen');
+            $('#change_title').text("Ordnername ändern");
+        });
+
+        $(document).on("click", ".update_file", function(){
+            var folder_name = $(this).data("name");
+            $('#old_name').val(folder_name);
+            $('#folder_name').val(folder_name);
+            $('#action').val("change_file");
+            $('#folderModal').modal("show");
+            $('#folder_button').val('übernehmen');
+            $('#change_title').text("Ordnername ändern");
         });
 
         $(document).on("click", ".delete", function(){
             var folder_name = $(this).data("name");
             var action = "delete";
-            if(confirm("Are you sure you want to remove it?"))
+            if(confirm("Bist du sicher, dass Du diesen Ordner löschen möchtest?"))
             {
                 $.ajax({
                     url:"action.php",
@@ -164,62 +199,28 @@
             }
         });
 
-        /*$(document).on("click", ".download", function () {
-            var downloadfile = $(this).data("name");
-            var action = "download";
-            $.ajax({
-                url:"action.php",
-                method:"POST",
-                data:{downloadfile:downloadfile, action:action},
-                success:function(data)
-                {
-                    load_folder_list();
-                }
-            });
-
-        });*/
-
-        $(document).on('click', '.upload', function(){
-            var folder_name = $(this).data("name");
-            $('#hidden_folder_name').val(folder_name);
-            $('#uploadModal').modal('show');
-        });
-
-        $('#upload_form').on('submit', function(){
-            $.ajax({
-                url:"upload_yt.php",
-                method:"POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData:false,
-                success: function(data)
-                {
-                    load_folder_list();
-                    alert(data);
-                }
-            });
-        });
-
-        $(document).on('click', '.view_files', function(){
-            var folder_name = $(this).data("name");
-            var action = "fetch_files";
-            $.ajax({
-                url:"action.php",
-                method:"POST",
-                data:{action:action, folder_name:folder_name},
-                success:function(data)
-                {
-                    $('#file_list').html(data);
-                    $('#filelistModal').modal('show');
-                }
-            });
-        });
+        $('#moveModal').on('submit', function () {
+            var old_location = $(this).data("name");
+            var new_location = $("#move_file").val();
+            var action = "move_file";
+            if(confirm("Bist du sicher, dass Du diese Datei verschieben möchtest?"))
+            {
+                $.ajax({
+                    url: "action.php",
+                    method: "POST",
+                    data: {old_location: old_location, new_location:new_location, action: action},
+                    success:function (data) {
+                        load_folder_list();
+                        alert(data);
+                    }
+                })
+            }
+        })
 
         $(document).on('click', '.remove_file', function(){
             var path = $(this).attr("id");
             var action = "remove_file";
-            if(confirm("Are you sure you want to remove this file?"))
+            if(confirm("Bist du sicher, dass Du diese Datei löschen möchtest?"))
             {
                 $.ajax({
                     url:"action.php",
@@ -234,22 +235,5 @@
                 });
             }
         });
-
-        $(document).on('blur', '.change_file_name', function(){
-            var folder_name = $(this).data("folder_name");
-            var old_file_name = $(this).data("file_name");
-            var new_file_name = $(this).text();
-            var action = "change_file_name";
-            $.ajax({
-                url:"action.php",
-                method:"POST",
-                data:{folder_name:folder_name, old_file_name:old_file_name, new_file_name:new_file_name, action:action},
-                success:function(data)
-                {
-                    alert(data);
-                }
-            });
-        });
-
     });
 </script>
