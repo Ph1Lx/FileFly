@@ -17,12 +17,8 @@ if(isset($_GET['register'])) {
     $email = $_POST['email'];
     $passwort = $_POST['passwort'];
     $passwort2 = $_POST['passwort2'];
-    $vorname = $_POST['vorname'];
-    $nachname = $_POST['nachname'];
     $benutzername = $_POST['benutzername'];
-    $geburtsdatum = $_POST['geburtsdatum'];
-    $geschlecht = $_POST['geschlecht'];
-    $telefonnummer = $_POST['telefonnummer'];
+  
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo 'Bitte eine gültige E-Mail-Adresse eingeben<br>';
         $error = true;
@@ -66,8 +62,8 @@ if(isset($_GET['register'])) {
     //Keine Fehler, wir können den Nutzer registrieren
     if(!$error) {
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
-        $statement = $pdo->prepare("INSERT INTO users2 (email, passwort, vorname, nachname, benutzername, geburtsdatum, geschlecht, telefonnummer) VALUES (:email, :passwort, :vorname, :nachname, :benutzername, :geburtsdatum, :geschlecht, :telefonnummer)");
-        $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash, 'vorname' => $vorname, 'nachname' => $nachname, 'benutzername' => $benutzername, 'geburtsdatum' => $geburtsdatum, 'geschlecht' => $geschlecht, 'telefonnummer' => $telefonnummer));
+        $statement = $pdo->prepare("INSERT INTO users2 (email, passwort,benutzername) VALUES (:email, :passwort,:benutzername)");
+        $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash, 'benutzername' => $benutzername));
         if($result) {
             echo 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
             $showFormular = false;
@@ -121,23 +117,8 @@ if($showFormular) {
 
     <form action="?register=1" method="post">
 
-        Vorname:<br>
-        <input type="vorname" size="40" maxlength="250" name="vorname"><br><br>
-
-        Nachname:<br>
-        <input type="nachname" size="40" maxlength="250" name="nachname"><br><br>
-
         Benutzername:<br>
         <input type="benutzername" size="40" maxlength="250" name="benutzername"><br><br>
-
-        Geburtsdatum:<br>
-        <input type="geburtsdatum" size="40" maxlength="250" name="geburtsdatum"><br><br>
-
-        Geschlecht:<br>
-        <input type="geschlecht" size="40" maxlength="250" name="geschlecht"><br><br>
-
-        Telefonnummer:<br>
-        <input type="telefonnummer" size="40" maxlength="250" name="telefonnummer"><br><br>
 
         E-Mail:<br>
         <input type="email" size="40" maxlength="250" name="email"><br><br>
