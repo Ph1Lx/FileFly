@@ -85,31 +85,6 @@ session_start();
     </div>
 </div>
 
-
-<?php
-
-/*if(isset($_POST['verschieben_button']))
-{
-    $fileName = $_SESSION['filename'];
-
-    $selectedFolder = $_POST['folder'];
-
-    $currentFilePath = $fileName;
-
-    $newFilePath = $selectedFolder.'/'.$fileName;
-
-    rename($currentFilePath, $newFilePath);
-
-    if($fileMoved){
-        echo "<script type='text/javascript'>alert('Deine Datei wurde erfolgreich verschoben!')</script>";
-    } else {
-        echo "<script type='text/javascript'>alert('Beim Verschieben deiner Datei lief etwas schief. Bitte versuche es nochmal!')</script>";
-    }
-
-}*/
-
-?>
-
 <script>
     $(document).ready(function(){
 
@@ -233,24 +208,6 @@ session_start();
                 });
             }
         });
-
-        /*$('#moveModal').on('submit', function () {
-            var old_location = $(this).data("name");
-            var new_location = $("#move_file").val();
-            var action = "move_file";
-            if(confirm("Bist du sicher, dass Du diese Datei verschieben möchtest?"))
-            {
-                $.ajax({
-                    url: "action.php",
-                    method: "POST",
-                    data: {old_location: old_location, new_location:new_location, action: action},
-                    success:function (data) {
-                        load_folder_list();
-                        alert(data);
-                    }
-                })
-            }
-        })*/
 
         $(document).on('click', '.remove_file', function(){
             var path = $(this).attr("id");
