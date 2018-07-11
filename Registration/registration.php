@@ -33,7 +33,7 @@ if(isset($_GET['register'])) {
     }
 
     if(strlen($benutzername) ==0) {
-        echo 'Bitte einnen Benutzernamen eingeben<br>';
+        echo 'Bitte einen Benutzername eingeben<br>';
         $error = true;
     }
 
@@ -48,7 +48,7 @@ if(isset($_GET['register'])) {
         }
     }
 
-    //Überprüfe, ob der Benutzname noch nicht vergeben ist
+    //Überprüfe, ob der Benutzername noch nicht vergeben ist
     if(!$error) {
         $statement = $pdo->prepare("SELECT * FROM users2 WHERE benutzername = :benutzername");
         $result = $statement->execute(array('benutzername' => $benutzername));
