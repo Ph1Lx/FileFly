@@ -126,19 +126,20 @@ if(isset($_POST["action"]))
 
     if($_POST["action"] == "move_file")
     {
-        //$selectedFolder = $_POST['folder'];
+        $newHome = $_POST["select_folder"];
+        $filename = basename($_POST["old_name"]);
+        $maindirectory = dirname($_POST["old_name"]);
 
-        $old_location = $_POST["old_location"];
+        if(!file_exists($maindirectory.$newHome.$filename))
+            {
+                rename($maindirectory.'/'.$filename, $maindirectory.'/'.$newHome.'/'.$filename);
+                echo 'Deine Datei wurde verschoben.';
+            }
+            else
+            {
+                echo 'Beim Verschieben deiner Datei lief etwas schief.';
+            }
 
-        $new_location = $directory.'/'.$_POST["new_location"].'/'.$name;
-
-        $fileMoved = rename($old_location, $new_location);
-
-        if($fileMoved){
-            echo 'Success!';
-        } else {
-            echo "Beim Verschieben deiner Datei lief etwas schief, versuche es nochmal!";
-        }
     }
 
     if($_POST["action"] == "remove_file")
