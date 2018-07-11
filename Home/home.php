@@ -1,3 +1,17 @@
+<?php
+session_start();
+if(!isset($_SESSION['userid'])) {
+    die('Bitte zuerst <a href="../Registration/login.php">einloggen</a>');
+}
+
+//Abfrage der Nutzer ID vom Login
+$userid = $_SESSION['userid'];
+
+$tablepath = "../uploads/table.php";
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,16 +33,22 @@
     </div>
     <div class="logo">
         <img id="logo" src="../pictures/logo.png">
+    </div>
+
+    <div class="logout">
 
     </div>
+
     <div class="profil">
-        <img id="bild" src="../pictures/profilbild.JPG">
+        <img id="profilbild" src="../pictures/profilbild.JPG">
     </div>
 </div>
 
+<a href="../Registration/logout.php">Ausloggen</a>
+
 <div id="content">
 
-     <iframe id="tabelle" src="../uploads/files/table.php"></iframe>
+     <iframe id="tabelle" src="<?php echo $tablepath ?>"></iframe>
 
 </div>
 

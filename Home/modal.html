@@ -23,7 +23,6 @@
             <li><a id="modal" data-toggle="modal" href="#myModal">Datei hochladen</a></li>
             <li><a id="modal2" data-toggle="modal" href="#folderModal">Ordner erstellen</a></li>
         </ul>
-        <button type="button" name="create_folder" id="create_folder" class="btn btn-success">Create</button>
     </div>
 </div>
 </body>
@@ -40,39 +39,47 @@
                     <h4>Datei Hochladen</h4>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
-                    <form action="../uploads/upload_yt.php" method="post"
-                          enctype="multipart/form-data" >
+                    <form action="../uploads/upload_yt.php" method="post" enctype="multipart/form-data" >
                         Datei auswählen:
-                        <input type="file" name="uploadfile"
-                               id="uploadfile"><br>
+                        <input type="file" name="uploadfile" id="uploadfile"><br>
                         <input type="submit" value="Datei hochladen" name="submit">
                     </form>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                </div>
             </div>
+
+
 
         </div>
     </div>
 
     <div id="folderModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
+
+
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="padding:20px 50px;">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title"><span id="change_title">Create Folder</span></h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="padding:40px 50px;">
                     <p>Enter Folder Name
                         <input type="text" name="folder_name" id="folder_name" class="form-control" /></p>
                     <br />
                     <input type="hidden" name="action" id="action" />
                     <input type="hidden" name="old_name" id="old_name" />
-                    <input type="button" name="folder_button" id="folder_button" class="btn btn-info" value="Create" />
+                    <input type="button" name="folder_button" id="folder_button" class="btn btn-default" value="Create" />
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
                 </div>
             </div>
+
+
+
         </div>
     </div>
 
@@ -82,6 +89,10 @@
     $(document).ready(function(){
         $("#modal").click(function(){
             $("#myModal").modal();
+        });
+
+        $("#modal2").click(function () {
+            $("#folderModal").modal();
         });
     });
 </script>
@@ -105,7 +116,7 @@
             if(folder_name != '')
             {
                 $.ajax({
-                    url:"action.php",
+                    url:"../uploads/action.php",
                     method:"POST",
                     data:{folder_name:folder_name, old_name:old_name, action:action},
                     success:function(data)
@@ -120,106 +131,6 @@
             {
                 alert("Enter Folder Name");
             }
-        });
-
-        $(document).on("click", ".update", function(){
-            var folder_name = $(this).data("name");
-            $('#old_name').val(folder_name);
-            $('#folder_name').val(folder_name);
-            $('#action').val("change");
-            $('#folderModal').modal("show");
-            $('#folder_button').val('Update');
-            $('#change_title').text("Change Folder Name");
-        });
-
-        $(document).on("click", ".delete", function(){
-            var folder_name = $(this).data("name");
-            var action = "delete";
-            if(confirm("Are you sure you want to remove it?"))
-            {
-                $.ajax({
-                    url:"action.php",
-                    method:"POST",
-                    data:{folder_name:folder_name, action:action},
-                    success:function(data)
-                    {
-                        load_folder_list();
-                        alert(data);
-                    }
-                });
-            }
-        });
-
-        $(document).on('click', '.upload', function(){
-            var folder_name = $(this).data("name");
-            $('#hidden_folder_name').val(folder_name);
-            $('#uploadModal').modal('show');
-        });
-
-        $('#upload_form').on('submit', function(){
-            $.ajax({
-                url:"upload_yt.php",
-                method:"POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData:false,
-                success: function(data)
-                {
-                    load_folder_list();
-                    alert(data);
-                }
-            });
-        });
-
-        $(document).on('click', '.view_files', function(){
-            var folder_name = $(this).data("name");
-            var action = "fetch_files";
-            $.ajax({
-                url:"action.php",
-                method:"POST",
-                data:{action:action, folder_name:folder_name},
-                success:function(data)
-                {
-                    $('#file_list').html(data);
-                    $('#filelistModal').modal('show');
-                }
-            });
-        });
-
-        $(document).on('click', '.remove_file', function(){
-            var path = $(this).attr("id");
-            var action = "remove_file";
-            if(confirm("Are you sure you want to remove this file?"))
-            {
-                $.ajax({
-                    url:"action.php",
-                    method:"POST",
-                    data:{path:path, action:action},
-                    success:function(data)
-                    {
-                        alert(data);
-                        $('#filelistModal').modal('hide');
-                        load_folder_list();
-                    }
-                });
-            }
-        });
-
-        $(document).on('blur', '.change_file_name', function(){
-            var folder_name = $(this).data("folder_name");
-            var old_file_name = $(this).data("file_name");
-            var new_file_name = $(this).text();
-            var action = "change_file_name";
-            $.ajax({
-                url:"action.php",
-                method:"POST",
-                data:{folder_name:folder_name, old_file_name:old_file_name, new_file_name:new_file_name, action:action},
-                success:function(data)
-                {
-                    alert(data);
-                }
-            });
         });
 
     });
