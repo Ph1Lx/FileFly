@@ -1,6 +1,17 @@
 <?php
 session_start();
 $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
+if(!isset($_SESSION['userid'])) {
+    die('Bitte zuerst <a href="../registration/login.php">einloggen</a>');
+}
+
+//Abfrage der Nutzer ID vom Login
+$userid = $_SESSION['userid'];
+
+$tablepath = "../uploads/table.php";
+
+
+
 ?>
 
 
@@ -41,7 +52,7 @@ $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106',
                             <table class="table table-user-information">
                                 <tbody>
 
-                                
+
 
                                 <tr>
                                     <th>Vorname:</th>
@@ -72,7 +83,6 @@ $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106',
                                 <?php $statment = $pdo->query("SELECT benutzername FROM users2 WHERE id =9");?>
                                 <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
 
-                                    <td> <?= htmlspecialchars($datensatz ['id']);?> </td>
                                     <td> <?= htmlspecialchars($datensatz ['benutzername']);?> </td>
                                     <?php endwhile; ?>
                                 </tr>
@@ -84,7 +94,6 @@ $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106',
                                 <?php $statment = $pdo->query("SELECT geburtsdatum FROM users2 WHERE id =9");?>
                                 <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
 
-                                    <td> <?= htmlspecialchars($datensatz ['id']);?> </td>
                                     <td> <?= htmlspecialchars($datensatz ['geburtsdatum']);?> </td>
                                     <?php endwhile; ?>
                                 </tr>
@@ -96,7 +105,6 @@ $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106',
                                 <?php $statment = $pdo->query("SELECT geschlecht FROM users2 WHERE id =9");?>
                                 <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
 
-                                    <td> <?= htmlspecialchars($datensatz ['id']);?> </td>
                                     <td> <?= htmlspecialchars($datensatz ['geschlecht']);?> </td>
                                     <?php endwhile; ?>
                                 </tr>
@@ -108,7 +116,6 @@ $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106',
                                 <?php $statment = $pdo->query("SELECT email FROM users2 WHERE id =9");?>
                                 <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
 
-                                    <td> <?= htmlspecialchars($datensatz ['id']);?> </td>
                                     <td> <?= htmlspecialchars($datensatz ['email']);?> </td>
                                     <?php endwhile; ?>
                                 </tr>
@@ -119,8 +126,7 @@ $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106',
 
                                 <?php $statment = $pdo->query("SELECT telefonnummer FROM users2 WHERE id =9");?>
                                 <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-                                    <td> <?= htmlspecialchars($datensatz ['id']);?> </td>
+                                    
                                     <td> <?= htmlspecialchars($datensatz ['telefonnummer']);?> </td>
                                     <?php endwhile; ?>
                                 </tr>
