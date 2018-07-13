@@ -1,6 +1,6 @@
 <?php
 session_start();
-$pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
+include "dbconnect.php";
 if(!isset($_SESSION['userid'])) {
     die('Bitte zuerst <a href="../registration/login.php">einloggen</a>');
 }
@@ -35,12 +35,63 @@ $tablepath = "../uploads/table.php";
                 <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
                 <h6>Bild Bearbeiten</h6>
 
-                <input type="file" class="form-control">
+
+                <form method='post' action='' enctype='multipart/form-data'>
+                    <input type='file' name='files[]' multiple />
+                    <input type='submit' value='Submit' name='submit' />
+                </form>
+
+
             </div>
         </div>
         <div class="col-md-9 personal-info">
 
             <form class="form-horizontal" role="form">
+
+                <?php
+
+                $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
+                if(isset($_POST['submit'])){
+
+                    // Count total files
+                    $countfiles = count($_FILES['bildname']['bild']);
+
+                    // Prepared statement
+                    $query = "INSERT INTO users2 (bildname,bild) VALUES(?,?)";
+
+                    $statement = $pdo->prepare($query);
+
+                    // Loop all files
+                    for($i=0;$i<$countfiles;$i++){
+
+                        // File name
+                        $filename = $_FILES['bildname']['bild'][$i];
+
+                        // Get extension
+                        $ext = end((explode(".", $bildname)));
+
+                        // Valid image extension
+                        $valid_ext = array("png","jpeg","jpg");
+
+                        if(in_array($ext, $valid_ext)){
+
+                            // Upload file
+                            if(move_uploaded_file($_FILES['files']['tmp_name'][$i],'upload/'.$bildname)){
+
+                                // Execute query
+                                $statement->execute(array($bildname,'upload/'.$bildname));
+
+                            }
+
+                        }
+
+                    }
+                    echo "File upload successfully";
+                }
+                ?>
+
+
+
 
 
                 <form action="?register=1" method="post">
@@ -78,7 +129,6 @@ $tablepath = "../uploads/table.php";
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Benutzername:</label>
                     <div class="col-lg-8">
-                        <?php echo $benutzername;?>
                         <input type="text" size="40" maxlength="250" name="benutzername" placeholder="Benutzername" value="<?php echo $benutzername;?>"><br><br>
                     </div>
                 </div>
