@@ -48,70 +48,18 @@ $tablepath = "../uploads/table.php";
 
             <form class="form-horizontal" role="form">
 
-                <?php
-
-                $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
-                if(isset($_POST['submit'])){
-
-                    // Count total files
-                    $countfiles = count($_FILES['bildname']['bild']);
-
-                    // Prepared statement
-                    $query = "INSERT INTO users2 (bildname,bild) VALUES(?,?)";
-
-                    $statement = $pdo->prepare($query);
-
-                    // Loop all files
-                    for($i=0;$i<$countfiles;$i++){
-
-                        // File name
-                        $filename = $_FILES['bildname']['bild'][$i];
-
-                        // Get extension
-                        $ext = end((explode(".", $bildname)));
-
-                        // Valid image extension
-                        $valid_ext = array("png","jpeg","jpg");
-
-                        if(in_array($ext, $valid_ext)){
-
-                            // Upload file
-                            if(move_uploaded_file($_FILES['files']['tmp_name'][$i],'upload/'.$bildname)){
-
-                                // Execute query
-                                $statement->execute(array($bildname,'upload/'.$bildname));
-
-                            }
-
-                        }
-
-                    }
-                    echo "File upload successfully";
-                }
-                ?>
-
-
-
-
 
                 <form action="?register=1" method="post">
-
-
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label">Kundennummer:</label>
-            <div class="col-lg-8">
-                <input type="text" size="40" maxlength="250" placeholder="Kundennummer" name="id" value="<?php echo $id;?>"><br><br>
-            </div>
-        </div>
 
 
 
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Vorname:</label>
                     <div class="col-lg-8">
-                            <input type="text" size="40" maxlength="250" placeholder="Vorname" name="vorname" value="<?php echo $vorname;?>"><br><br>
-
+                            <input type="text" size="40" maxlength="250" placeholder="Vorname" name="vorname" value="<?php $statment = $pdo->query("SELECT vorname FROM users2 WHERE id = $userid");?>
+                            <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?> <?= htmlspecialchars($datensatz ['vorname']);?> ">
+                                 <br><br>
+                        <?php endwhile; ?>
 
                     </div>
                 </div>
@@ -120,7 +68,9 @@ $tablepath = "../uploads/table.php";
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Nachname:</label>
                     <div class="col-lg-8">
-                        <input type="text" size="40" maxlength="250" placeholder="Nachname" name="nachname" value="<?php echo $nachname;?>"><br><br>
+                        <input type="text" size="40" maxlength="250" placeholder="Nachname" name="nachname" value="<?php $statment = $pdo->query("SELECT nachname FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+                                             <?= htmlspecialchars($datensatz ['nachname']);?> "><br><br>  <?php endwhile; ?>
 
                     </div>
                 </div>
@@ -129,7 +79,9 @@ $tablepath = "../uploads/table.php";
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Benutzername:</label>
                     <div class="col-lg-8">
-                        <input type="text" size="40" maxlength="250" name="benutzername" placeholder="Benutzername" value="<?php echo $benutzername;?>"><br><br>
+                        <input type="text" size="40" maxlength="250" name="benutzername" placeholder="Benutzername" value="<?php $statment = $pdo->query("SELECT benutzername FROM users2 WHERE id = $userid");?>
+                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+                        <?= htmlspecialchars($datensatz ['benutzername']);?>"><br><br><?php endwhile; ?>
                     </div>
                 </div>
 
@@ -161,8 +113,12 @@ $tablepath = "../uploads/table.php";
                 <div class="form-group">
                     <label class="col-md-3 control-label">Telefonnummer:</label>
                     <div class="col-md-8">
-                        <input type="text"  size="40" maxlength="250" name="telefonnummer" placeholder="Telefonnummer" value="<?php echo $telefonnummer;?>"><br><br>
+                        <input type="text"  size="40" maxlength="250" name="telefonnummer" placeholder="Telefonnummer" value="<?php $statment = $pdo->query("SELECT telefonnummer FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+                                            <?= htmlspecialchars($datensatz ['telefonnummer']);?>"><br><br>
+                        <?php endwhile; ?>
                     </div>
+
                 </div>
 
                 </form>
@@ -172,9 +128,6 @@ $tablepath = "../uploads/table.php";
                     <label class="col-md-3 control-label"></label>
                     <form action="edit.php" method="post">
                     <div class="col-md-8">
-
-                        <input type="submit" name="update" value="Update">
-                        <input type="submit" name="delete" value="Delete">
 
                     </form>
                     <span></span>
@@ -191,6 +144,7 @@ $tablepath = "../uploads/table.php";
 
 
 </body>
+
 
 
 </html>
