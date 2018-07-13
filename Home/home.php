@@ -66,10 +66,10 @@ $tablepath = "../uploads/table.php";
 
 </div>
 
-<ol id="newButton"></ol>
+<!--<ol id="newButton"></ol>
 <script>
     $("#newButton").load("modal.html");
-</script>
+</script>-->
 
 <div id="footer">
     <div id="footercontent">

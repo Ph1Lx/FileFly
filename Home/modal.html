@@ -62,15 +62,15 @@
             <div class="modal-content">
                 <div class="modal-header" style="padding:20px 50px;">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"><span id="change_title">Create Folder</span></h4>
+                    <h4 class="modal-title"><span id="change_title">Ordner erstellen</span></h4>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
-                    <p>Enter Folder Name
+                    <p>Gib einen Ordnername ein
                         <input type="text" name="folder_name" id="folder_name" class="form-control" /></p>
                     <br />
                     <input type="hidden" name="action" id="action" />
                     <input type="hidden" name="old_name" id="old_name" />
-                    <input type="button" name="folder_button" id="folder_button" class="btn btn-default" value="Create" />
+                    <input type="button" name="folder_button" id="folder_button" class="btn btn-default" value="Erstellen" />
 
                 </div>
                 <div class="modal-footer">
@@ -103,10 +103,10 @@
         $(document).on('click', '#create_folder', function(){
             $('#action').val("create");
             $('#folder_name').val('');
-            $('#folder_button').val('Create');
+            $('#folder_button').val('Übernehmen');
             $('#folderModal').modal('show');
             $('#old_name').val('');
-            $('#change_title').text("Create Folder");
+            $('#change_title').text("Ordner erstellen");
         });
 
         $(document).on('click', '#folder_button', function(){
