@@ -1,6 +1,6 @@
 <?php
 session_start();
-$pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
+include "dbconnect.php";
 if(!isset($_SESSION['userid'])) {
     die('Bitte zuerst <a href="../registration/login.php">einloggen</a>');
 }
@@ -45,7 +45,7 @@ $tablepath = "../uploads/table.php";
                     <div class="row">
                         <div class="col-md-3">
                             <div class="text-center">
-                                <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
+                                <img src="https://nesea.org/sites/default/files/styles/thumbnail/public/user-icon-default_4286.png?itok=Pt1kNb2P" class="avatar img-circle" alt="avatar">
 
 
                             </div>
