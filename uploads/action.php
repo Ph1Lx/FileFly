@@ -1,5 +1,6 @@
 <?php
 session_start();
+$pdo = new PDO('mysql:host=localhost;dbname=u-ns106', 'ns106', 'se4aeda8Ai');
 
 $directory = $_SESSION['userid'].'/';
 
@@ -50,7 +51,7 @@ if(isset($_POST["action"]))
       <td>'.basename($file).'</td>
       <td><button type="button" name="change_file" data-name="'.basename($file).'" class="update_file btn btn-default btn-xs">Rename</button></td>
       <td><button type="button" name="remove_file" class="remove_file btn btn-default btn-xs" id="'.$file.'">Delete</button></td>
-      <td><button type="button" name="view_files" data-name="'.$file.'" class="view_files btn btn-default btn-xs">Teilen</button></td>
+      <td><button type="button" name="share_file" data-name="'.$file.'" class="share_file btn btn-default btn-xs">Teilen</button></td>
       <td><a download="'.$file.'" href="'.$file.'"> Download</a></td>
       <td><button type="button" name="move_file" data-name="'.$file.'" class="move_file btn btn-default btn-xs" data-toggle="modal" data-target="#moveModal">Verschieben</button></td>
 
@@ -162,6 +163,39 @@ if(isset($_POST["action"]))
         {
             echo 'Eine Datei mit diesem Name existiert bereits';
         }
+    }
+
+
+    if($_POST["action"] == "share_file")
+    {
+        $old_location = $_POST["old_name"];
+        $user = $_POST["user"];
+        $filename = basename($_POST["old_name"]);
+        $maindirectory = dirname($_POST["old_name"]);
+
+        echo $old_location;
+
+        if(!empty($share_user)){
+            $statement = $pdo->prepare("SELECT id FROM users2 WHERE benutzername = $user");
+            $result = $statement->execute(array('benutzername' => $user_id));
+            $user_id = $statement->fetch();
+            /*if($user !== false) {
+                echo 'Der User existiert';
+            } else {
+                echo 'Es gibt keinen User mit diesem Benutzernamen.';
+            }*/
+        }
+
+        /*if(!file_exists($maindirectory.$newHome.$filename))
+        {
+            copy($maindirectory.'/'.$filename, $user.'/.fürmichfreigegeben/'.$filename);
+            echo 'Deine Datei wurde geteilt.';
+        }
+        else
+        {
+            echo 'Beim Teilen deiner Datei lief etwas schief.';
+        }*/
+
     }
 }
 ?>

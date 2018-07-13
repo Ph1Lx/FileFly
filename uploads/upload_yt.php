@@ -20,7 +20,7 @@ if (isset($name)) {
 
             if (move_uploaded_file($tmp_name, $location.'/'.$name)) {
                 chmod($location.'/'.$name, 0777);
-                header('Location: ../Home/home.php');
+                header('Location: table.php');
              } else {
                  echo 'There was an error.';
             }

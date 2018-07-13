@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -16,25 +17,62 @@ session_start();
     <h2 align="left">Ablage</a></h2>
     <br />
     <div align="right">
-        <button type="button" name="create_folder" id="create_folder" class="btn btn-success">Create</button>
+
+        <div class="btn-group">
+            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle" id="myBtn">Neu</button>
+            <ul class="dropdown-menu">
+                <li><a id="modal" data-toggle="modal">Datei hochladen</a></li>
+                <li><a id="create_folder" data-toggle="modal" name="create_folder">Ordner erstellen</a></li>
+            </ul>
+        </div>
     </div>
     <br />
     <div class="table-responsive" id="folder_table">
 
     </div>
+
+
+
+
 </div>
 </body>
 </html>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog" role="document">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="padding:20px 50px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Datei Hochladen</h4>
+            </div>
+            <div class="modal-body" style="padding:40px 50px;">
+                <form action="../uploads/upload_yt.php" method="post" enctype="multipart/form-data" >
+                    Datei auswählen:
+                    <input type="file" name="uploadfile" id="uploadfile"><br>
+                    <input type="submit" value="Datei hochladen" name="submit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
 
 <div id="folderModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><span id="change_title">Create Folder</span></h4>
+                <h4 class="modal-title"><span id="change_title">Ordner erstellen</span></h4>
             </div>
             <div class="modal-body">
-                <p>Gib einen Ordnername ein
+                <p>Gib einen Namen ein
                     <input type="text" name="folder_name" id="folder_name" class="form-control" /></p>
                 <br />
                 <input type="hidden" name="action" id="action" />
@@ -48,6 +86,8 @@ session_start();
         </div>
     </div>
 </div>
+
+
 
 <div id="moveModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -70,13 +110,37 @@ session_start();
                                 }
                                 ?>
                         </select>
-                    <!--<input type="submit" name="verschieben_button" id="verschieben_button" value="Verschieben" class="btn btn-default"/>-->
+
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="old_name" id="old_name" />
                         <input type="button" name="move_button" id="move_button" class="btn btn-default" value="Verschieben" />
                     </form>
 
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="shareModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span id="share_title">Wähle einen Nutzer zum Teilen deiner Datei</span></h4>
+            </div>
+            <div class="modal-body">
+                <p>Gib die Email-Adresse des Nutzers ein mit dem du die Datei teilen möchtest
+                    <input type="text" name="user" id="user" class="form-control" /></p>
+                <br />
+                <input type="hidden" name="action" id="action" />
+                <input type="hidden" name="old_name" id="old_name" />
+                <input type="button" name="share_button" id="share_button" class="btn btn-default" value="Create" />
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
@@ -104,13 +168,17 @@ session_start();
             });
         }
 
+        $("#modal").click(function(){
+            $("#myModal").modal();
+        });
+
         $(document).on('click', '#create_folder', function(){
             $('#action').val("create");
             $('#folder_name').val('');
-            $('#folder_button').val('Create');
+            $('#folder_button').val('Übernehmen');
             $('#folderModal').modal('show');
             $('#old_name').val('');
-            $('#change_title').text("Create Folder");
+            $('#change_title').text("Ordner erstellen");
         });
 
         $(document).on('click', '#folder_button', function(){
@@ -154,7 +222,7 @@ session_start();
             $('#action').val("change_file");
             $('#folderModal').modal("show");
             $('#folder_button').val('Übernehmen');
-            $('#change_title').text("Ordnername ändern");
+            $('#change_title').text("Dateiname ändern");
         });
 
         $(document).on("click", ".move_file", function(){
@@ -227,5 +295,47 @@ session_start();
                 });
             }
         });
+
+
+
+
+
+
+
+        $(document).on("click", ".share_file", function(){
+            var old_name = $(this).data("name");
+            $('#old_name').val(old_name);
+
+            $('#action').val("share_file");
+            $('#shareModal').modal("show");
+            $('#share_button').val('Teilen');
+            //$('#share_title').text("Wähle den Zielordner");
+        });
+
+        $(document).on('click', '#share_button', function(){
+            var user = $('#user').val();
+            var old_name = $('#old_name').val();
+            var action = $('#action').val();
+            if(user_name != '')
+            {
+                $.ajax({
+                    url:"action.php",
+                    method:"POST",
+                    data:{user:user, old_name:old_name, action:action},
+                    success:function(data)
+                    {
+                        $('#shareModal').modal('hide');
+                        load_folder_list();
+                        alert(data);
+                    }
+                });
+            }
+            else
+            {
+                alert("Gib einen Benutzernamen ein!");
+            }
+        });
     });
 </script>
+
+
