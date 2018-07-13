@@ -19,7 +19,7 @@ if(isset($_GET['register'])) {
     $passwort2 = $_POST['passwort2'];
     $benutzername = $_POST['benutzername'];
 
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {           
         echo 'Bitte eine gültige E-Mail-Adresse eingeben<br>';
         $error = true;
     }
@@ -37,23 +37,23 @@ if(isset($_GET['register'])) {
         $error = true;
     }
 
-    //Überprüfe, dass die E-Mail-Adresse noch nicht registriert wurde
+    
     if(!$error) {
-        $statement = $pdo->prepare("SELECT * FROM users2 WHERE email = :email");
+        $statement = $pdo->prepare("SELECT * FROM users2 WHERE email = :email"); //Es wird in der Datenbank überprüft ob die email bereits existiert.
         $result = $statement->execute(array('email' => $email));
         $user = $statement->fetch();
-        if($user !== false) {
+        if($user !== false) {                                 
             echo 'Diese E-Mail-Adresse ist bereits vergeben<br>';
             $error = true;
         }
     }
 
-    //Überprüfe, ob der Benutzname noch nicht vergeben ist
+    
     if(!$error) {
-        $statement = $pdo->prepare("SELECT * FROM users2 WHERE benutzername = :benutzername");
+        $statement = $pdo->prepare("SELECT * FROM users2 WHERE benutzername = :benutzername"); // Es wird überprüft ob der Benutzername bereits vergeben ist.
         $result = $statement->execute(array('benutzername' => $benutzername));
         $user = $statement->fetch();
-        if($user !== false) {
+        if($user !== false) {                        
             echo 'Dieser Benutzername existiert bereits<br>';
             $error = true;
         }
@@ -61,7 +61,7 @@ if(isset($_GET['register'])) {
 
     //Keine Fehler, wir können den Nutzer registrieren
     if(!$error) {
-        $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
+        $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT); // Das Passwort wird gehast, sodass in der DB das Passwort nicht zu lesen ist.
         $statement = $pdo->prepare("INSERT INTO users2 (email, passwort, benutzername) VALUES (:email, :passwort, :benutzername)");
         $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash, 'benutzername' => $benutzername));
         if($result) {
@@ -100,9 +100,9 @@ if($showFormular) {
         Passwort wiederholen:<br>
         <input type="password" size="40" maxlength="250" name="passwort2"><br><br>
 
-        <p>Du hast bereits einen Account? Dann kommst du hier zum <a href="login.php">Login</a>. </p>
+        <p>Du hast bereits einen Account? Dann kommst du hier zum <a href="login.php">Login</a>. </p> //Verlinkung auf die Login Seite
 
-        <input type="submit" value="Abschicken">
+        <input type="submit" value="Abschicken"> // Abschick Button
     </form>
 
     <?php
