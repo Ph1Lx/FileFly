@@ -10,86 +10,8 @@ $userid = $_SESSION['userid'];
 
 $tablepath = "../uploads/table.php";
 
-try {
+//insert
 
-    $pdo = new PDO('mysql::host=mars.iuk.hdm-stuttgart.de.;dbname=u-ns106', 'ns106', 'se4aeda8Ai', array('charset'=>'utf8'));
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}
-catch (Exception $ex){
-    echo 'Not Connected'.$ex->getMessage();
-}
-
-$id = '';
-$vorname = '';
-$nachname = '';
-$benutzername = '';
-$geburtsdatum = '';
-
-
-function getPosts(){
-
-    $posts =  array();
-
-    $posts [0] = $_POST['id'];
-    $posts [1] = $_POST['vorname'];
-    $posts [2] = $_POST['nachname'];
-    $posts [3] = $_POST['geburtsdatum'];
-    $posts [4] = $_POST['benutzername'];
-
-    return $posts;
-}
-
-
-//Update Data
-
-if (isset($_POST ['update']))
-{
-    $data = getPosts();
-    if (empty($data[0]) || empty($data[1]) || empty($data [2]) || empty($data [3]) || empty($data [4]))
-    {
-        echo 'Enter The Data To Update';
-    } else {
-
-        $updateStmt = $pdo->prepare('UPDATE users2 SET vorname = :vorname, nachname =:nachname, geburtsdatum= :geburtsdatum, benutzername= :benutzername WHERE id= :$userid');
-        $updateStmt->execute(array(
-            ':id'=>$data[0],
-            ':vorname'=>$data[1],
-            ':nachname'=>$data[2],
-            ':geburtsdatum'=>$data[3],
-            ':benutzername'=>$data[4]
-        ));
-        if ($updateStmt)
-
-        {
-            echo 'Data Updated';
-        }
-
-    }
-}
-
-// Delete Data
-
-if (isset($_POST ['delete']))
-{
-    $data = getPosts();
-    if (empty($data[0]))
-    {
-        echo 'Enter The User ID To Delete';
-    } else {
-
-        $deleteStmt = $pdo->prepare(' DELETE FROM users2 WHERE id= :$userid');
-        $deleteStmt ->execute(array(
-            ':id'=>$data[0],
-
-        ));
-        if ($deleteStmt )
-
-        {
-            echo 'User Deleted';
-        }
-
-    }
-}
 
 ?>
 
@@ -120,14 +42,15 @@ if (isset($_POST ['delete']))
 
             <form class="form-horizontal" role="form">
 
+
+                <form action="?register=1" method="post">
+
+
+
         <div class="form-group">
             <label class="col-lg-3 control-label">Kundennummer:</label>
             <div class="col-lg-8">
-                <input type="text" size="40" maxlength="250" name="id" value="<?php $statment = $pdo->query("SELECT id FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['id']);?>
-                                <?php endwhile; ?>">
-                                <?php echo $id;?>
+                <input type="text" size="40" maxlength="250" placeholder="Kundennummer" name="id" value="<?php echo $id;?>"><br><br>
             </div>
         </div>
 
@@ -136,12 +59,8 @@ if (isset($_POST ['delete']))
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Vorname:</label>
                     <div class="col-lg-8">
-                        <form action="edit.php" method="POST">
-                        <?php echo $vorname;?>
-                        <input type="text" size="40" maxlength="250" name="vorname" value="<?php $statment = $pdo->query("SELECT vorname FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['vorname']);?>
-                                <?php endwhile; ?>">
+                            <input type="text" size="40" maxlength="250" placeholder="Vorname" name="vorname" value="<?php echo $vorname;?>"><br><br>
+
 
                     </div>
                 </div>
@@ -150,11 +69,8 @@ if (isset($_POST ['delete']))
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Nachname:</label>
                     <div class="col-lg-8">
-                        <?php echo $nachname;?>
-                        <input type="text" size="40" maxlength="250" name="nachname" value="<?php $statment = $pdo->query("SELECT nachname FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['nachname']);?>
-                                <?php endwhile; ?>">
+                        <input type="text" size="40" maxlength="250" placeholder="Nachname" name="nachname" value="<?php echo $nachname;?>"><br><br>
+
                     </div>
                 </div>
 
@@ -163,10 +79,7 @@ if (isset($_POST ['delete']))
                     <label class="col-lg-3 control-label">Benutzername:</label>
                     <div class="col-lg-8">
                         <?php echo $benutzername;?>
-                        <input type="text" size="40" maxlength="250" name="benutzername" value=" <?php $statment = $pdo->query("SELECT benutzername FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['benutzername']);?>
-                                <?php endwhile; ?>">
+                        <input type="text" size="40" maxlength="250" name="benutzername" placeholder="Benutzername" value="<?php echo $benutzername;?>"><br><br>
                     </div>
                 </div>
 
@@ -174,10 +87,7 @@ if (isset($_POST ['delete']))
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Geburtsdatum:</label>
                     <div class="col-lg-8">
-                        <input type="text" size="40" maxlength="250" name="geburtsdatum" value="<?php $statment = $pdo->query("SELECT geburtsdatum FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['geburtsdatum']);?>
-                                    <?php endwhile; ?>">
+                        <input type="text"  size="40" maxlength="250" name="geburtsdatum" placeholder="Geburtsdatum" value="<?php echo $geburtsdatum;?>"><br><br>
                     </div>
                 </div>
 
@@ -185,10 +95,7 @@ if (isset($_POST ['delete']))
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Geschlecht:</label>
                     <div class="col-lg-8">
-                        <input type="text" size="40" maxlength="250" name="geschlecht" value=" <?php $statment = $pdo->query("SELECT geschlecht FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['geschlecht']);?>
-                                    <?php endwhile; ?>">
+                        <input type="text" size="40" maxlength="250" name="geschlecht" placeholder="Geschlecht" value="<?php echo $geschlecht;?>"><br><br>
                     </div>
                 </div>
 
@@ -196,10 +103,7 @@ if (isset($_POST ['delete']))
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Email:</label>
                     <div class="col-lg-8">
-                        <input type="email" size="40" maxlength="250" name="email" value="<?php $statment = $pdo->query("SELECT email FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['email']);?>
-                                    <?php endwhile; ?>">
+                        <input type="text"  size="40" maxlength="250" name="email" placeholder="Email" value="<?php echo $email;?>"><br><br>
                     </div>
                 </div>
 
@@ -207,28 +111,11 @@ if (isset($_POST ['delete']))
                 <div class="form-group">
                     <label class="col-md-3 control-label">Telefonnummer:</label>
                     <div class="col-md-8">
-                        <input type="text" size="40" maxlength="250" name="telefonnummer" value=" <?php $statment = $pdo->query("SELECT telefonnummer FROM users2 WHERE id =$userid");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                <?= htmlspecialchars($datensatz ['telefonnummer']);?>
-                                    <?php endwhile; ?>">
+                        <input type="text"  size="40" maxlength="250" name="telefonnummer" placeholder="Telefonnummer" value="<?php echo $telefonnummer;?>"><br><br>
                     </div>
                 </div>
 
-
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Passwort:</label>
-                    <div class="col-md-8">
-                        <input type="password" size="40"  maxlength="250" name="passwort">
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Passwort bestätigen:</label>
-                    <div class="col-md-8">
-                        <input type="password" size="40" maxlength="250" name="passwort2">
-                    </div>
-                </div>
+                </form>
 
 
                 <div class="form-group">
@@ -241,6 +128,8 @@ if (isset($_POST ['delete']))
 
                     </form>
                     <span></span>
+
+
                         <A href="profilseite.php" >Cancel </A>
                     </div>
                 </div>
