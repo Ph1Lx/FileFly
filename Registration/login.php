@@ -44,6 +44,8 @@ if(isset($errorMessage)) {
     Dein Passwort:<br>
     <input type="password" size="40"  maxlength="250" name="passwort"><br>
 
+    <p>Du hast noch keinen Account? Dann kannst du dich hier <a href="registration.php.php">registrieren</a>. </p>
+
     <input type="submit" value="Abschicken">
 </form>
 </body>

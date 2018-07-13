@@ -86,10 +86,10 @@ if(isset($_GET['register'])) {
 if($showFormular) {
     ?>
 
-    <form action="?register=1" method="post">
+    <form id="form" action="?register=1" method="post">
 
         Benutzername:<br>
-        <input type="benutzername" size="40" maxlength="250" name="benutzername"><br><br>
+        <input type="text" size="40" maxlength="250" name="benutzername"><br><br>
 
         E-Mail:<br>
         <input type="email" size="40" maxlength="250" name="email"><br><br>
@@ -99,6 +99,8 @@ if($showFormular) {
 
         Passwort wiederholen:<br>
         <input type="password" size="40" maxlength="250" name="passwort2"><br><br>
+
+        <p>Du hast bereits einen Account? Dann kommst du hier zum <a href="login.php">Login</a>. </p>
 
         <input type="submit" value="Abschicken">
     </form>

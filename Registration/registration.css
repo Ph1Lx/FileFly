@@ -15,12 +15,14 @@ a{
 a:hover{
     text-decoration:underline;
 }
-.form{
+#form{
     width: 300px;
     margin: 0 auto;
+    position: relative;
 }
 input[type='text'], input[type='email'],
-input[type='password'] {
+input[type='password'], input[type='benutzername']{
+    top: 50%;
     width: 200px;
     border-radius: 2px;
     border: 1px solid #CCC;
