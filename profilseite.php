@@ -43,101 +43,103 @@ $tablepath = "../uploads/table.php";
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-3 col-lg-3 " align="center">
-
-                            <img alt="User Pic" src="https://neubaukarte.de/wp-content/uploads/2016/02/agent-3-1-350x350.jpg" class="img-circle img-responsive"> </div>
-
-                        <form action="try.php" method="post">
-                        <div class=" col-md-9 col-lg-9 ">
-                            <table class="table table-user-information">
-                                <tbody>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
 
 
-
-                                <tr>
-                                    <th>Vorname:</th>
-
-                               <?php $statment = $pdo->query("SELECT vorname FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-
-                                    <td> <?= htmlspecialchars($datensatz ['vorname']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-
-                                <tr>
-                                    <th>Nachname:</th>
-
-                                <?php $statment = $pdo->query("SELECT nachname FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-
-                                    <td> <?= htmlspecialchars($datensatz ['nachname']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-                                <tr>
-                                    <th>Benutzername:</th>
-
-                                <?php $statment = $pdo->query("SELECT benutzername FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-                                    <td> <?= htmlspecialchars($datensatz ['benutzername']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-
-                                <tr>
-                                    <th>Geburtsdatum:</th>
-
-                                <?php $statment = $pdo->query("SELECT geburtsdatum FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-                                    <td> <?= htmlspecialchars($datensatz ['geburtsdatum']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-
-                                <tr>
-                                    <th>Geschlecht:</th>
-
-                                <?php $statment = $pdo->query("SELECT geschlecht FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-                                    <td> <?= htmlspecialchars($datensatz ['geschlecht']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-
-                                <tr>
-                                    <th>Email:</th>
-
-                                <?php $statment = $pdo->query("SELECT email FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-
-                                    <td> <?= htmlspecialchars($datensatz ['email']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-
-                                <tr>
-                                    <th>Telefonnummer:</th>
-
-                                <?php $statment = $pdo->query("SELECT telefonnummer FROM users2 WHERE id =9");?>
-                                <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
-                                    
-                                    <td> <?= htmlspecialchars($datensatz ['telefonnummer']);?> </td>
-                                    <?php endwhile; ?>
-                                </tr>
-
-
-                                </tbody>
-
-                            </table>
-
-
+                            </div>
                         </div>
+                            <div class=" col-md-9 col-lg-9 ">
+                                <table class="table table-user-information">
+                                    <tbody>
+
+
+
+                                    <tr>
+                                        <th>Vorname:</th>
+
+                                        <?php $statment = $pdo->query("SELECT vorname FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+
+                                            <td> <?= htmlspecialchars($datensatz ['vorname']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>Nachname:</th>
+
+                                        <?php $statment = $pdo->query("SELECT nachname FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+
+                                            <td> <?= htmlspecialchars($datensatz ['nachname']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Benutzername:</th>
+
+                                        <?php $statment = $pdo->query("SELECT benutzername FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+                                            <td> <?= htmlspecialchars($datensatz ['benutzername']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>Geburtsdatum:</th>
+
+                                        <?php $statment = $pdo->query("SELECT geburtsdatum FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+                                            <td> <?= htmlspecialchars($datensatz ['geburtsdatum']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>Geschlecht:</th>
+
+                                        <?php $statment = $pdo->query("SELECT geschlecht FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+                                            <td> <?= htmlspecialchars($datensatz ['geschlecht']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>Email:</th>
+
+                                        <?php $statment = $pdo->query("SELECT email FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+                                            <td> <?= htmlspecialchars($datensatz ['email']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+
+                                    <tr>
+                                        <th>Telefonnummer:</th>
+
+                                        <?php $statment = $pdo->query("SELECT telefonnummer FROM users2 WHERE id = $userid");?>
+                                        <?php while ($datensatz = $statment->fetch(PDO::FETCH_ASSOC)): ?>
+
+                                            <td> <?= htmlspecialchars($datensatz ['telefonnummer']);?> </td>
+                                        <?php endwhile; ?>
+                                    </tr>
+
+
+                                    </tbody>
+
+                                </table>
+
+
+                            </div>
 
 
                         </form>
